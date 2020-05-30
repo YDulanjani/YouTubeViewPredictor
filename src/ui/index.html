@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <head>
+    <title>YouTube Views Prediction</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-git2.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+	/*	function alignModal(){
+				var modalDialog = $(this).find(".modal-dialog");
+				/* Applying the top margin on modal dialog to align it vertically center */
+	/*			modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2));
+		}
+		
+		
+		$(document).ready(function(){
+			// Align modal when it is displayed
+			$(".modal").on("shown.bs.modal", alignModal);
+			
+			// Align modal when user resize the window
+			$(window).on("resize", function(){
+				$(".modal:visible").each(alignModal);
+			});   
+		});
+	*/
+		
+	</script>
+    <style>
+      html, body {
+      min-height: 80%;
+      }
+      body, div, form, input, select, textarea, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 36px;
+      color: #fff;
+      z-index: 2;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      form {
+      width: 50%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 20px 0 #333; 
+      }
+      .banner {
+      position: relative;
+      height: 210px;
+      background-image: url("img/utube.png");      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      }
+      .banner::after {
+      content: "";
+      <--background-color: rgba(0, 0, 0, 0.4); !--></--background-color:>
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      }
+      input, textarea, select {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100%);
+      padding: 5px;
+      }
+      select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+      }
+      textarea {
+      width: calc(100%);
+      padding: 5px;
+      }
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+      color: #333;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 6px 0 #333;
+      color: #333;
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      }
+      .item i, input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #a9a9a9;
+      }
+      .item i {
+      right: 1%;
+      top: 30px;
+      z-index: 1;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+      right: 0;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+      }
+      input[type="time"]::-webkit-inner-spin-button {
+      margin: 2px 22px 0 0;
+      }
+      input[type=radio], input.other {
+      display: none;
+      }
+      label.radio {
+      position: relative;
+      display: inline-block;
+      margin: 5px 20px 10px 0;
+      cursor: pointer;
+      }
+      .question span {
+      margin-left: 30px;
+      }
+      label.radio:before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      }
+      #radio_5:checked ~ input.other {
+      display: block;
+      }
+      input[type=radio]:checked + label.radio:before {
+      border: 2px solid #444;
+      background: #444;
+      }
+      label.radio:after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 5px;
+      width: 7px;
+      height: 4px;
+      border: 3px solid #fff;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+      }
+      input[type=radio]:checked + label:after {
+      opacity: 1;
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background: #444;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background: #666;
+      }
+      .modal-header, h4, .close {
+		background-color: #EA3C53;
+		color:white !important;
+		text-align: center;
+		font-size: 30px;
+	  }
+	  .modal-footer {
+		background-color: #f9f9f9;
+	  }
+      @media screen and (max-width: 1030px){
+	  .form-class {
+		  width: 100%;
+		  padding: 20px;
+		  border-radius: 6px;
+		  background: #fff;
+		  box-shadow: 0 0 20px 0 #333; 
+      }
+      .name-item, .city-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .name-item input, .city-item input {
+      width: calc(80%);
+      }
+      .city-item select {
+      width: calc(80%);
+      }
+      .modal-header, h2, h4, .close {
+<!--		background-color: #EA3C53;-->
+		color:black !important;
+		text-align: center;
+		font-size: 18px;
+		padding: 1px !important;
+	  }
+	  .modal-footer {
+		background-color: #f9f9f9;
+	  }
+      }
+      
+
+    </style>
+  </head>
+  <body>
+    <div class="testbox">
+      <form id = "form"  class = "form-class" action="#" name = "form" onsubmit="predict(); return false">
+        <div class="banner">
+          <h1>YouTube Views Prediction</h1>
+        </div>
+        <div class="item">
+          <p>Channel Name</p>
+          <div class="name-item">
+            <input type="text" name="channel_name" placeholder="Enter the name of your channel" required/>
+          </div>
+        </div>
+        <div class="item">
+          <p>Video Title</p>
+          <div class="name-item">
+			<input type="text" name="title" placeholder="Enter the title of your video " required/>
+          </div>
+        </div>
+        <div class="item">
+			<p>Category</p>
+			<div class="city-item" >
+			<select name = "category" id= "category"required>
+			  <option value="1">Film & Animation</option>
+			  <option value="2">Autos & Vehicles</option>
+			  <option value="10">Music</option>
+			  <option value="15">Pets & Animals</option>
+			  <option value="17">Sports</option>
+			  <option value="18">Short Movies</option>
+			  <option value="19">Travel & Events</option>
+			  <option value="20">Gaming</option>
+			  <option value="21">Videoblogging</option>
+			  <option value="22">People & Blogs</option>
+			  <option value="23">Comedy</option>
+			  <option value="24">Entertainment</option>
+			  <option value="25">News & Politics</option>
+			  <option value="26">Howto & Style</option>
+			  <option value="27">Education</option>
+			  <option value="28">Science & Technology</option>
+			  <option value="29">Nonprofits & Activism</option>
+			  <option value="30">Movies</option>
+			  <option value="31">Anime/Animation</option>
+			  <option value="32">Action/Adventure</option>
+			  <option value="33">Classics</option>
+			  <option value="34">Comedy</option>
+			  <option value="35">Documentary</option>
+			  <option value="36">Drama</option>
+			  <option value="37">Family</option>
+			  <option value="38">Foreign</option>
+			  <option value="39">Horror</option>
+			  <option value="41">Thriller</option>
+			  <option value="42">Shorts</option>
+			  <option value="43">Shows</option>
+			  <option value="44">Trailers</option>
+			</select>
+			</div>
+        </div>
+        <div class="item">
+          <p>Comments</p>
+          <div class="city-item" >
+			  <select name= "comments" id= "comments" required>
+			  <option value="0" selected="selected">Enable</option>
+              <option value="1">Disable</option>
+              </select>
+		  </div>
+        </div>
+        <div class="item">
+          <p>Ratings</p>
+          <div class="city-item" >
+			  <select name = "ratings" id = "ratings" required>
+			  <option value="0" selected="selected">Enable</option>
+              <option value="1">Disable</option>
+              </select>
+		  </div>
+        </div>
+        
+        <div class="item">
+          <p>Tags</p>
+          <input type="text" name="tags" placeholder="Include tags with '|' seperator " required/>
+        </div>
+        
+        <div class="item">
+          <p>Description</p>
+          <textarea rows="3" name "description" required></textarea>
+        </div>
+        
+        <div class="item">
+          <p>Video Publishing Date</p>
+          <input type="date" name="publish_date" required/>
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        
+        <div class="item">
+          <p>Predict View Count Until</p>
+          <input type="date" name="predict_date" required/>
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        
+        <div class="btn-block">
+          <button type="submit">PREDICT</button>
+        </div>
+      </form>
+      
+       <!-- Modal -->
+	  <div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+		
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			  <div class="modal-header" style="padding:35px 150px;">
+				 <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+				  <h4><span ></span> Your YouTube View Count Will Be.... </h4>
+			  </div>
+			
+			<div class="modal-body">
+			  <center><h2 id = "pred" name = "pred" > </h2></center>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+			</div>
+		  </div>
+		  
+		</div>
+	   </div>
+	   
+    </div>
+  </body>
+  
+  <script>
+	function predict(){
+	    /*
+		console.log("biasdhsi" + $('#category  option:selected').val())
+		
+		console.log($("input[name=channel_name]").val())
+		
+		console.log($("input[name=title]").val())
+		
+		console.log($('#comments option:selected').val())
+		
+		console.log($('#ratings option:selected').val())
+		
+		console.log($("input[name=tags]").val())
+		
+		console.log($("input[name=publish_date]").val())
+		
+		console.log($("input[name=predict_date]").val()) */
+		
+		var for_publish_date = new Date($("input[name=publish_date]").val())
+		var for_trending_date = new Date($("input[name=predict_date]").val())
+		const diffTime = Math.abs(for_publish_date - for_trending_date);
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+		const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+		const pubYear = for_publish_date.getYear()+1900;
+		const pubMonth = for_publish_date.getMonth()+1;
+		const trYear = for_trending_date.getYear()+1900;
+		const trMonth = for_trending_date.getMonth()+1;
+		
+		const channelText = $("input[name=title]").val() + " " + $("input[name=channel_name]").val() + " " + $("input[name=tags]").val()
+		var rating_disabled = '\\\"FALSE\\\"'
+		const selected_rating = $('#ratings option:selected').val()
+		if(selected_rating > 0){
+			rating_disabled = '\\\"TRUE\\\"'
+		}
+		
+		var comments_disabled = '\\\"FALSE\\\"'
+		const selected_comment = $('#comments option:selected').val()
+		if( selected_comment > 0){
+			comments_disabled = '\\\"TRUE\\\"'
+		}
+		
+		//console.log("formatted " + diffHours  + " ," + diffDays + "," + pubYear + ", " + pubMonth);
+		
+		//var DATA = '{"channel_title" : "'+$("input[name=channel_name]").val()+'", "title" : "'+$("input[name=title]").val()+'", "tags" : "'+$("input[name=tags]").val()+'" , "trending_date" : "'+$("input[name=predict_date]").val()+'" , "publish_time" : "'+$("input[name=publish_date]").val()+'", "comments_disabled" : '+$("#ratings option:selected").val()+' , "ratings_disabled" : '+$("#ratings option:selected").val()+' , "category" : '+$("#category  option:selected").val()+'}'
+	    var DATA = '{"category_id":'+$('#category  option:selected').val()+',"comments_disabled":"'+comments_disabled+'","ratings_disabled":"'+rating_disabled+'","channel_text":"'+channelText+'","difference_d":'+diffDays+',"difference_h":'+diffHours+',"published_year":'+pubYear+',"published_month":'+pubMonth+',"trending_year":'+trYear+',"trending_month":'+trMonth+'}';	
+		
+		
+		var result = predict_value(DATA);
+		//console.log("result "+result)
+		
+		
+		
+		//var stri= '{"predicted_label": 1227853.0133243673, "Insight": {"featureImportance": {"format": "table", "name": "Feature Importance", "headers": ["Feature", "Value"], "data": [{"Feature": "official", "Value": 0.1693619156369805}, {"Feature": "difference_h", "Value": 0.13197240721599712}, {"Feature": "video", "Value": 0.053889161347554684}, {"Feature": "dude", "Value": 0.04355384175916286}, {"Feature": "records", "Value": 0.03726554784753121}, {"Feature": "difference_d", "Value": 0.035498384837471704}, {"Feature": "movie", "Value": 0.03288426503395141}, {"Feature": "pop", "Value": 0.02530975578682021}, {"Feature": "science", "Value": 0.024832896221962993}, {"Feature": "fox", "Value": 0.023918917769298546}, {"Feature": "film", "Value": 0.023770553922491437}, {"Feature": "cardi", "Value": 0.022103060852338322}, {"Feature": "audio", "Value": 0.02175118958008092}, {"Feature": "category_id", "Value": 0.020793846702335507}, {"Feature": "ft", "Value": 0.020502546469439765}, {"Feature": "trending_month", "Value": 0.019189570213599925}, {"Feature": "welcome", "Value": 0.018867926657686766}, {"Feature": "selena", "Value": 0.01859123120589884}, {"Feature": "entertainment", "Value": 0.017372030196709604}, {"Feature": "gomez", "Value": 0.015483774968292036}, {"Feature": "ball", "Value": 0.015419825443859711}, {"Feature": "music", "Value": 0.014527569223686513}, {"Feature": "don", "Value": 0.013612548184915613}, {"Feature": "ed", "Value": 0.013190137771870575}, {"Feature": "animation", "Value": 0.013138750010217614}, {"Feature": "kevin", "Value": 0.013042859644177432}, {"Feature": "star", "Value": 0.012767446568056673}, {"Feature": "disney", "Value": 0.012332988020313577}, {"Feature": "published_month", "Value": 0.009304098523620115}, {"Feature": "perfect", "Value": 0.008475265375268206}, {"Feature": "olympics", "Value": 0.008409490890656826}, {"Feature": "family", "Value": 0.006745112994350176}, {"Feature": "new", "Value": 0.006329970776663227}, {"Feature": "anvil", "Value": 0.0059912179160421936}, {"Feature": "brothers", "Value": 0.00545153338790942}, {"Feature": "live", "Value": 0.004968958931195733}, {"Feature": "jack", "Value": 0.0046764956761641595}, {"Feature": "published_year", "Value": 0.004288879278644386}, {"Feature": "simon", "Value": 0.00400508726492312}, {"Feature": "jennifer", "Value": 0.003943957052947855}, {"Feature": "love", "Value": 0.003214644284577834}, {"Feature": "netflix", "Value": 0.0029670631173985204}, {"Feature": "trailer", "Value": 0.0026098473747892003}, {"Feature": "2018", "Value": 0.002422228612960189}, {"Feature": "deadpool", "Value": 0.002365042960884423}, {"Feature": "lip", "Value": 0.0023316753659204876}, {"Feature": "action", "Value": 0.00195820939405035}, {"Feature": "time", "Value": 0.0017262387040142396}, {"Feature": "kids", "Value": 0.0016671567774232496}, {"Feature": "bad", "Value": 0.00156041715009267}, {"Feature": "2017", "Value": 0.0013318855738268117}, {"Feature": "trick", "Value": 0.0012419241169945535}, {"Feature": "graham", "Value": 0.0012232714766942528}, {"Feature": "videos", "Value": 0.001211098754099233}, {"Feature": "like", "Value": 0.001104985256175694}, {"Feature": "charlie", "Value": 0.0010476853851566232}, {"Feature": "water", "Value": 0.0010349897003505241}, {"Feature": "ratings_disabled_\"False\"", "Value": 0.0009977302487457576}, {"Feature": "black", "Value": 0.0009086256590682079}, {"Feature": "youtube", "Value": 0.0008883269205626286}, {"Feature": "test", "Value": 0.000700974961815221}, {"Feature": "super", "Value": 0.0005606096502500397}, {"Feature": "diplo", "Value": 0.0005602597800332329}, {"Feature": "animated", "Value": 0.0005171861175010375}, {"Feature": "donald", "Value": 0.0005114771852411531}, {"Feature": "kylie", "Value": 0.0005057225376112913}, {"Feature": "apple", "Value": 0.0004911976938830525}, {"Feature": "movies", "Value": 0.00043895670094836294}, {"Feature": "game", "Value": 0.000390497057598188}, {"Feature": "basketball", "Value": 0.0003620073565100548}, {"Feature": "marvel", "Value": 0.0003400522321011986}, {"Feature": "season", "Value": 0.0003319037819683487}, {"Feature": "real", "Value": 0.00031698127469251817}, {"Feature": "christmas", "Value": 0.00029428385675151777}, {"Feature": "house", "Value": 0.00029083718945201306}, {"Feature": "comedy", "Value": 0.0002100136655739603}, {"Feature": "friendly", "Value": 0.00020656684440913017}, {"Feature": "iphone", "Value": 0.00020645629308014803}, {"Feature": "sports", "Value": 0.0001874559066735166}, {"Feature": "song", "Value": 0.0001837355924050139}, {"Feature": "makeup", "Value": 0.0001768411549722758}, {"Feature": "comments_disabled_\"False\"", "Value": 0.00014566641904859386}, {"Feature": "red", "Value": 0.00013140805927840907}, {"Feature": "news", "Value": 0.00010812948163721109}, {"Feature": "good", "Value": 9.898950876142405e-05}, {"Feature": "jimmy", "Value": 7.85752738760862e-05}, {"Feature": "vs", "Value": 6.693232366529203e-05}, {"Feature": "channel", "Value": 6.0322824049895685e-05}, {"Feature": "james", "Value": 3.65777815731375e-05}, {"Feature": "royal", "Value": 2.27950347654417e-05}, {"Feature": "review", "Value": 2.0363408039602206e-05}, {"Feature": "funny", "Value": 1.7206388492950172e-05}, {"Feature": "year", "Value": 1.6322014416361016e-05}, {"Feature": "world", "Value": 1.626385146092657e-05}, {"Feature": "idol", "Value": 1.2284914578579031e-05}, {"Feature": "secret", "Value": 1.1078327292882244e-05}, {"Feature": "highlights", "Value": 9.355062366195209e-06}, {"Feature": "10", "Value": 7.512099040718259e-06}, {"Feature": "lilly", "Value": 3.6277647916821767e-06}, {"Feature": "react", "Value": 1.597666602742893e-06}, {"Feature": "bbc", "Value": 9.705249401718343e-07}, {"Feature": "american", "Value": 7.316992741384181e-07}, {"Feature": "try", "Value": 6.992783873999024e-07}, {"Feature": "trailers", "Value": 2.886074731093124e-07}, {"Feature": "big", "Value": 1.0827023601701176e-07}, {"Feature": "challenge", "Value": 5.625431224640583e-08}, {"Feature": "nbc", "Value": 5.0784774222610054e-08}, {"Feature": "trending_year", "Value": 4.970439108259337e-09}, {"Feature": "best", "Value": 5.780812576082034e-10}, {"Feature": "comments_disabled_\"True\"", "Value": 0.0}, {"Feature": "ratings_disabled_\"True\"", "Value": 0.0}, {"Feature": "adam", "Value": 0.0}, {"Feature": "alex", "Value": 0.0}, {"Feature": "amazon", "Value": 0.0}, {"Feature": "animals", "Value": 0.0}, {"Feature": "anna", "Value": 0.0}, {"Feature": "art", "Value": 0.0}, {"Feature": "awards", "Value": 0.0}, {"Feature": "baby", "Value": 0.0}, {"Feature": "bass", "Value": 0.0}, {"Feature": "beauty", "Value": 0.0}, {"Feature": "bon", "Value": 0.0}, {"Feature": "bowl", "Value": 0.0}, {"Feature": "box", "Value": 0.0}, {"Feature": "boy", "Value": 0.0}, {"Feature": "brad", "Value": 0.0}, {"Feature": "buzzfeed", "Value": 0.0}, {"Feature": "cat", "Value": 0.0}, {"Feature": "cats", "Value": 0.0}, {"Feature": "celebrity", "Value": 0.0}, {"Feature": "chocolate", "Value": 0.0}, {"Feature": "chris", "Value": 0.0}, {"Feature": "commercial", "Value": 0.0}, {"Feature": "cooking", "Value": 0.0}, {"Feature": "cosmetics", "Value": 0.0}, {"Feature": "day", "Value": 0.0}, {"Feature": "diy", "Value": 0.0}, {"Feature": "dog", "Value": 0.0}, {"Feature": "drag", "Value": 0.0}, {"Feature": "ellen", "Value": 0.0}, {"Feature": "face", "Value": 0.0}, {"Feature": "fashion", "Value": 0.0}, {"Feature": "food", "Value": 0.0}, {"Feature": "fun", "Value": 0.0}, {"Feature": "games", "Value": 0.0}, {"Feature": "gauntlet", "Value": 0.0}, {"Feature": "giant", "Value": 0.0}, {"Feature": "google", "Value": 0.0}, {"Feature": "health", "Value": 0.0}, {"Feature": "high", "Value": 0.0}, {"Feature": "hollywood", "Value": 0.0}, {"Feature": "home", "Value": 0.0}, {"Feature": "humor", "Value": 0.0}, {"Feature": "ice", "Value": 0.0}, {"Feature": "india", "Value": 0.0}, {"Feature": "infinity", "Value": 0.0}, {"Feature": "interview", "Value": 0.0}, {"Feature": "john", "Value": 0.0}, {"Feature": "kardashian", "Value": 0.0}, {"Feature": "kid", "Value": 0.0}, {"Feature": "kim", "Value": 0.0}, {"Feature": "king", "Value": 0.0}, {"Feature": "kitchen", "Value": 0.0}, {"Feature": "late", "Value": 0.0}, {"Feature": "life", "Value": 0.0}, {"Feature": "link", "Value": 0.0}, {"Feature": "liza", "Value": 0.0}, {"Feature": "make", "Value": 0.0}, {"Feature": "makeover", "Value": 0.0}, {"Feature": "man", "Value": 0.0}, {"Feature": "morning", "Value": 0.0}, {"Feature": "mythical", "Value": 0.0}, {"Feature": "nba", "Value": 0.0}, {"Feature": "night", "Value": 0.0}, {"Feature": "party", "Value": 0.0}, {"Feature": "people", "Value": 0.0}, {"Feature": "protein", "Value": 0.0}, {"Feature": "puth", "Value": 0.0}, {"Feature": "recipe", "Value": 0.0}, {"Feature": "rhett", "Value": 0.0}, {"Feature": "school", "Value": 0.0}, {"Feature": "scott", "Value": 0.0}, {"Feature": "series", "Value": 0.0}, {"Feature": "singh", "Value": 0.0}, {"Feature": "smallest", "Value": 0.0}, {"Feature": "smith", "Value": 0.0}, {"Feature": "smosh", "Value": 0.0}, {"Feature": "snl", "Value": 0.0}, {"Feature": "sp", "Value": 0.0}, {"Feature": "space", "Value": 0.0}, {"Feature": "stephen", "Value": 0.0}, {"Feature": "street", "Value": 0.0}, {"Feature": "talk", "Value": 0.0}, {"Feature": "tasty", "Value": 0.0}, {"Feature": "team", "Value": 0.0}, {"Feature": "television", "Value": 0.0}, {"Feature": "theory", "Value": 0.0}, {"Feature": "things", "Value": 0.0}, {"Feature": "treasure", "Value": 0.0}, {"Feature": "trump", "Value": 0.0}, {"Feature": "tutorial", "Value": 0.0}, {"Feature": "tv", "Value": 0.0}, {"Feature": "vegan", "Value": 0.0}, {"Feature": "vlog", "Value": 0.0}, {"Feature": "vogue", "Value": 0.0}, {"Feature": "voice", "Value": 0.0}, {"Feature": "wars", "Value": 0.0}, {"Feature": "watch", "Value": 0.0}, {"Feature": "wedding", "Value": 0.0}, {"Feature": "wwe", "Value": 0.0}, {"Feature": "york", "Value": 0.0}]}}, "Model": "RandomForestRegressor-a21496c0-7366-484c-adc3-9ed4368d6361", "Message": ""}' ;
+		
+		
+		//var stri = '{"predicted_label":1227853.0133243673,"Insight":{"featureImportance":{"format":"table","name":"Feature Importance","headers":["Feature","Value"],"data":[{"Feature":"official","Value":0.1693619156369805},{"Feature":"difference_h","Value":0.13197240721599712},{"Feature":"video","Value":0.053889161347554684},{"Feature":"dude","Value":0.04355384175916286},{"Feature":"records","Value":0.03726554784753121},{"Feature":"difference_d","Value":0.035498384837471704},{"Feature":"movie","Value":0.03288426503395141},{"Feature":"pop","Value":0.02530975578682021},{"Feature":"science","Value":0.024832896221962993},{"Feature":"fox","Value":0.023918917769298546},{"Feature":"film","Value":0.023770553922491437},{"Feature":"cardi","Value":0.022103060852338322},{"Feature":"audio","Value":0.02175118958008092},{"Feature":"category_id","Value":0.020793846702335507},{"Feature":"ft","Value":0.020502546469439765},{"Feature":"trending_month","Value":0.019189570213599925},{"Feature":"welcome","Value":0.018867926657686766},{"Feature":"selena","Value":0.01859123120589884},{"Feature":"entertainment","Value":0.017372030196709604},{"Feature":"gomez","Value":0.015483774968292036},{"Feature":"ball","Value":0.015419825443859711},{"Feature":"music","Value":0.014527569223686513},{"Feature":"don","Value":0.013612548184915613},{"Feature":"ed","Value":0.013190137771870575},{"Feature":"animation","Value":0.013138750010217614},{"Feature":"kevin","Value":0.013042859644177432},{"Feature":"star","Value":0.012767446568056673},{"Feature":"disney","Value":0.012332988020313577},{"Feature":"published_month","Value":0.009304098523620115},{"Feature":"perfect","Value":0.008475265375268206},{"Feature":"olympics","Value":0.008409490890656826},{"Feature":"family","Value":0.006745112994350176},{"Feature":"new","Value":0.006329970776663227},{"Feature":"anvil","Value":0.0059912179160421936},{"Feature":"brothers","Value":0.00545153338790942},{"Feature":"live","Value":0.004968958931195733},{"Feature":"jack","Value":0.0046764956761641595},{"Feature":"published_year","Value":0.004288879278644386},{"Feature":"simon","Value":0.00400508726492312},{"Feature":"jennifer","Value":0.003943957052947855},{"Feature":"love","Value":0.003214644284577834},{"Feature":"netflix","Value":0.0029670631173985204},{"Feature":"trailer","Value":0.0026098473747892003},{"Feature":"2018","Value":0.002422228612960189},{"Feature":"deadpool","Value":0.002365042960884423},{"Feature":"lip","Value":0.0023316753659204876},{"Feature":"action","Value":0.00195820939405035},{"Feature":"time","Value":0.0017262387040142396},{"Feature":"kids","Value":0.0016671567774232496},{"Feature":"bad","Value":0.00156041715009267},{"Feature":"2017","Value":0.0013318855738268117},{"Feature":"trick","Value":0.0012419241169945535},{"Feature":"graham","Value":0.0012232714766942528},{"Feature":"videos","Value":0.001211098754099233},{"Feature":"like","Value":0.001104985256175694},{"Feature":"charlie","Value":0.0010476853851566232},{"Feature":"water","Value":0.0010349897003505241},{"Feature":"ratings_disabled_False","Value":0.0009977302487457576},{"Feature":"black","Value":0.0009086256590682079},{"Feature":"youtube","Value":0.0008883269205626286},{"Feature":"test","Value":0.000700974961815221},{"Feature":"super","Value":0.0005606096502500397},{"Feature":"diplo","Value":0.0005602597800332329},{"Feature":"animated","Value":0.0005171861175010375},{"Feature":"donald","Value":0.0005114771852411531},{"Feature":"kylie","Value":0.0005057225376112913},{"Feature":"apple","Value":0.0004911976938830525},{"Feature":"movies","Value":0.00043895670094836294},{"Feature":"game","Value":0.000390497057598188},{"Feature":"basketball","Value":0.0003620073565100548},{"Feature":"marvel","Value":0.0003400522321011986},{"Feature":"season","Value":0.0003319037819683487},{"Feature":"real","Value":0.00031698127469251817},{"Feature":"christmas","Value":0.00029428385675151777},{"Feature":"house","Value":0.00029083718945201306},{"Feature":"comedy","Value":0.0002100136655739603},{"Feature":"friendly","Value":0.00020656684440913017},{"Feature":"iphone","Value":0.00020645629308014803},{"Feature":"sports","Value":0.0001874559066735166},{"Feature":"song","Value":0.0001837355924050139},{"Feature":"makeup","Value":0.0001768411549722758},{"Feature":"comments_disabled_False","Value":0.00014566641904859386},{"Feature":"red","Value":0.00013140805927840907},{"Feature":"news","Value":0.00010812948163721109},{"Feature":"good","Value":9.898950876142405e-5},{"Feature":"jimmy","Value":7.85752738760862e-5},{"Feature":"vs","Value":6.693232366529203e-5},{"Feature":"channel","Value":6.0322824049895685e-5},{"Feature":"james","Value":3.65777815731375e-5},{"Feature":"royal","Value":2.27950347654417e-5},{"Feature":"review","Value":2.0363408039602206e-5},{"Feature":"funny","Value":1.7206388492950172e-5},{"Feature":"year","Value":1.6322014416361016e-5},{"Feature":"world","Value":1.626385146092657e-5},{"Feature":"idol","Value":1.2284914578579031e-5},{"Feature":"secret","Value":1.1078327292882244e-5},{"Feature":"highlights","Value":9.355062366195209e-6},{"Feature":"10","Value":7.512099040718259e-6},{"Feature":"lilly","Value":3.6277647916821767e-6},{"Feature":"react","Value":1.597666602742893e-6},{"Feature":"bbc","Value":9.705249401718343e-7},{"Feature":"american","Value":7.316992741384181e-7},{"Feature":"try","Value":6.992783873999024e-7},{"Feature":"trailers","Value":2.886074731093124e-7},{"Feature":"big","Value":1.0827023601701176e-7},{"Feature":"challenge","Value":5.625431224640583e-8},{"Feature":"nbc","Value":5.0784774222610054e-8},{"Feature":"trending_year","Value":4.970439108259337e-9},{"Feature":"best","Value":5.780812576082034e-10},{"Feature":"comments_disabled_True","Value":0},{"Feature":"ratings_disabled_True","Value":0},{"Feature":"adam","Value":0},{"Feature":"alex","Value":0},{"Feature":"amazon","Value":0},{"Feature":"animals","Value":0},{"Feature":"anna","Value":0},{"Feature":"art","Value":0},{"Feature":"awards","Value":0},{"Feature":"baby","Value":0},{"Feature":"bass","Value":0},{"Feature":"beauty","Value":0},{"Feature":"bon","Value":0},{"Feature":"bowl","Value":0},{"Feature":"box","Value":0},{"Feature":"boy","Value":0},{"Feature":"brad","Value":0},{"Feature":"buzzfeed","Value":0},{"Feature":"cat","Value":0},{"Feature":"cats","Value":0},{"Feature":"celebrity","Value":0},{"Feature":"chocolate","Value":0},{"Feature":"chris","Value":0},{"Feature":"commercial","Value":0},{"Feature":"cooking","Value":0},{"Feature":"cosmetics","Value":0},{"Feature":"day","Value":0},{"Feature":"diy","Value":0},{"Feature":"dog","Value":0},{"Feature":"drag","Value":0},{"Feature":"ellen","Value":0},{"Feature":"face","Value":0},{"Feature":"fashion","Value":0},{"Feature":"food","Value":0},{"Feature":"fun","Value":0},{"Feature":"games","Value":0},{"Feature":"gauntlet","Value":0},{"Feature":"giant","Value":0},{"Feature":"google","Value":0},{"Feature":"health","Value":0},{"Feature":"high","Value":0},{"Feature":"hollywood","Value":0},{"Feature":"home","Value":0},{"Feature":"humor","Value":0},{"Feature":"ice","Value":0},{"Feature":"india","Value":0},{"Feature":"infinity","Value":0},{"Feature":"interview","Value":0},{"Feature":"john","Value":0},{"Feature":"kardashian","Value":0},{"Feature":"kid","Value":0},{"Feature":"kim","Value":0},{"Feature":"king","Value":0},{"Feature":"kitchen","Value":0},{"Feature":"late","Value":0},{"Feature":"life","Value":0},{"Feature":"link","Value":0},{"Feature":"liza","Value":0},{"Feature":"make","Value":0},{"Feature":"makeover","Value":0},{"Feature":"man","Value":0},{"Feature":"morning","Value":0},{"Feature":"mythical","Value":0},{"Feature":"nba","Value":0},{"Feature":"night","Value":0},{"Feature":"party","Value":0},{"Feature":"people","Value":0},{"Feature":"protein","Value":0},{"Feature":"puth","Value":0},{"Feature":"recipe","Value":0},{"Feature":"rhett","Value":0},{"Feature":"school","Value":0},{"Feature":"scott","Value":0},{"Feature":"series","Value":0},{"Feature":"singh","Value":0},{"Feature":"smallest","Value":0},{"Feature":"smith","Value":0},{"Feature":"smosh","Value":0},{"Feature":"snl","Value":0},{"Feature":"sp","Value":0},{"Feature":"space","Value":0},{"Feature":"stephen","Value":0},{"Feature":"street","Value":0},{"Feature":"talk","Value":0},{"Feature":"tasty","Value":0},{"Feature":"team","Value":0},{"Feature":"television","Value":0},{"Feature":"theory","Value":0},{"Feature":"things","Value":0},{"Feature":"treasure","Value":0},{"Feature":"trump","Value":0},{"Feature":"tutorial","Value":0},{"Feature":"tv","Value":0},{"Feature":"vegan","Value":0},{"Feature":"vlog","Value":0},{"Feature":"vogue","Value":0},{"Feature":"voice","Value":0},{"Feature":"wars","Value":0},{"Feature":"watch","Value":0},{"Feature":"wedding","Value":0},{"Feature":"wwe","Value":0},{"Feature":"york","Value":0}]}},"Model":"RandomForestRegressor-a21496c0-7366-484c-adc3-9ed4368d6361","Message":""}';
+		
+		//console.log(JSON.parse(stri));
+		
+	}
+	
+	function predict_value(data) {
+			//console.log("data : " + data)
+			var ENDPOINT = 'https://k7acq76z66.execute-api.us-east-1.amazonaws.com/Predict/42523ca9-dfaf-4ca9-916c-2279c10b542c';
+			return fetch(ENDPOINT, {
+			  method: 'POST',
+			  body: data,
+			  headers: {
+				  'Content-Type': 'application/json'
+			  },
+			})
+			.then(function(res){
+				//console.log("res"+JSON.stringify(res));
+				return res.json();
+			})
+			.then(function(response){ 
+				//console.log("response body " + JSON.stringify(response.body))
+				
+				//console.log("body : " + response.body)
+				//var res = response.body.replaceAll("\\\"","");
+				var res = response.body.split("\\\"").join("");
+				//console.log("res_replaced" + res);
+				var pred = JSON.parse(res).predicted_label;
+				console.log("predicted label : " + Math.floor(pred));
+				document.getElementById('pred').innerHTML=Math.floor(pred);
+				
+				//$(".modal").on("shown.bs.modal", alignModal);
+				
+				$('#myModal').modal('show');
+				return pred;
+			})
+			.catch(err => console.log('err', err));
+    };
+		
+  </script>
+</html>
